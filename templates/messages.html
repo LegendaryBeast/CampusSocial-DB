@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Messages - Social Platform{% endblock %}
+
+{% block content %}
+<h1>Messages</h1>
+
+<div class="messages-grid">
+    <!-- Conversations List -->
+    <div class="card">
+        <h2 style="margin-bottom: 1rem;">Conversations</h2>
+        {% if conversations %}
+            {% for conv in conversations %}
+            <a href="{{ url_for('messages', user_id=conv.other_user_id) }}" 
+               class="conversation-item {% if selected_user_id == conv.other_user_id %}active{% endif %}">
+                <strong>{{ conv.other_user_name }}</strong>
+            </a>
+            {% endfor %}
+        {% else %}
+            <p style="color: var(--text-muted); text-align: center; padding: 1rem;">No conversations yet.</p>
+        {% endif %}
+        
+        <hr style="margin: 1.5rem 0; border: none; border-top: 1px solid var(--border);">
+        <h3 style="margin-bottom: 1rem; font-size: 0.95rem; font-weight: 500;">New Conversation</h3>
+        <form method="POST" action="{{ url_for('send_message') }}">
+            <div class="form-group" style="margin-bottom: 0.75rem;">
+                <select name="receiver_id" required>
+                    <option value="">Select user...</option>
+                    {% for user in users %}
+                    <option value="{{ user.user_id }}">{{ user.name }} ({{ user.email }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group" style="margin-bottom: 0.75rem;">
+                <textarea name="content" required style="min-height: 100px;"></textarea>
+            </div>
+            <button type="submit" class="btn" style="width: 100%;">Send</button>
+        </form>
+    </div>
+    
+    <!-- Messages View -->
+    <div class="card">
+        {% if selected_user_id %}
+            <h2 style="margin-bottom: 1rem;">Messages</h2>
+            <div style="max-height: 500px; overflow-y: auto; margin-bottom: 1rem;">
+                {% if messages %}
+                    {% for msg in messages %}
+                    <div class="message-bubble {% if msg.sender_id == session.user_id %}message-sent{% else %}message-received{% endif %}">
+                        <div style="font-weight: 500; margin-bottom: 0.5rem; font-size: 0.9rem;">
+                            {% if msg.sender_id == session.user_id %}You{% else %}{{ msg.sender_name }}{% endif %}
+                        </div>
+                        <div style="white-space: pre-wrap;">{{ msg.content }}</div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">
+                            {{ msg.created_at[:16] if msg.created_at else '' }}
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p style="color: var(--text-muted); text-align: center; padding: 2rem;">
+                        No messages yet.
+                    </p>
+                {% endif %}
+            </div>
+            
+            <form method="POST" action="{{ url_for('send_message') }}">
+                <input type="hidden" name="receiver_id" value="{{ selected_user_id }}">
+                <div class="form-group" style="margin-bottom: 0.75rem;">
+                    <textarea name="content" required style="min-height: 100px;"></textarea>
+                </div>
+                <button type="submit" class="btn" style="width: 100%;">Send</button>
+            </form>
+        {% else %}
+            <div style="text-align: center; padding: 4rem 2rem;">
+                <p style="color: var(--text-muted);">
+                    Select a conversation to view messages.
+                </p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+

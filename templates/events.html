@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Events - Social Platform{% endblock %}
+
+{% block content %}
+<h1>Events</h1>
+
+<!-- Create Event Form -->
+<div class="card">
+    <h2>Create Event</h2>
+    <form method="POST" action="{{ url_for('create_event') }}">
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" id="title" name="title" required>
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" name="description"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="event_date">Date</label>
+            <input type="date" id="event_date" name="event_date" required>
+        </div>
+        <div class="form-group">
+            <label for="image">Image URL (optional)</label>
+            <input type="url" id="image" name="image">
+        </div>
+        <button type="submit" class="btn">Create</button>
+    </form>
+</div>
+
+<!-- Events List -->
+<h2>Upcoming Events</h2>
+{% if events %}
+    {% for event in events %}
+    <div class="card">
+        <div style="margin-bottom: 1rem;">
+            <h3 style="margin-bottom: 0.5rem;">{{ event.title }}</h3>
+            <p style="color: var(--text-muted); margin-bottom: 0.5rem;">
+                Created by: {{ event.user_name }}
+            </p>
+            <p style="color: var(--text-muted); margin-bottom: 0.5rem;">
+                Date: {{ event.event_date }}
+            </p>
+        </div>
+        {% if event.description %}
+        <p style="margin-bottom: 1rem; white-space: pre-wrap;">{{ event.description }}</p>
+        {% endif %}
+        {% if event.image %}
+        <div style="margin-bottom: 1rem;">
+            <a href="{{ event.image }}" target="_blank">View Image</a>
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+{% else %}
+    <div class="card">
+        <p style="text-align: center; color: var(--text-muted); padding: 2rem;">
+            No events yet.
+        </p>
+    </div>
+{% endif %}
+{% endblock %}
+

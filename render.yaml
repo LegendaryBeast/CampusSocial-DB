@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: social-platform
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: "pip install -r requirements.txt && python init_db.py"
+    startCommand: "gunicorn app:app"
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: SECRET_KEY
+        generateValue: true
+      - key: PYTHON_VERSION
+        value: 3.11.0
