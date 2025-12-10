@@ -8,6 +8,8 @@ Email: abdullah500@gmail.com | Password: Abdullah123
 Email: zubayer22@gmail.com | Password: zubzub123
 Email: ishtiaque-cse@sust.edu | Password: teacher123
 Email: tanzimp6@gmail.com | Password: admin123
+Live link : https://campussocial-db.onrender.com/
+note : use the already created account, because free version of Render do not support SQLite.
 
 ## Features
 
