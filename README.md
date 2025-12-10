@@ -14,7 +14,8 @@ Email: tanzimp6@gmail.com | Password: admin123
 
 Live link : https://campussocial-db.onrender.com/
 
-**Note : Use the already created account, because free version of Render do not support SQLite.**
+**Note : Use the already created account, because free version of Render do not support SQLite.<br>
+Better you run this in your Local PC.**
 
 ## Features
 
