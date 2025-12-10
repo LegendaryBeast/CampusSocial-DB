@@ -5,11 +5,16 @@ A complete working database system with a minimal web interface for a social/com
 ## password
 
 Email: abdullah500@gmail.com | Password: Abdullah123
+
 Email: zubayer22@gmail.com | Password: zubzub123
+
 Email: ishtiaque-cse@sust.edu | Password: teacher123
+
 Email: tanzimp6@gmail.com | Password: admin123
+
 Live link : https://campussocial-db.onrender.com/
-note : use the already created account, because free version of Render do not support SQLite.
+
+**Note : Use the already created account, because free version of Render do not support SQLite.**
 
 ## Features
 
