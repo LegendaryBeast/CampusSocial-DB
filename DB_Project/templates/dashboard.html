@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Social Platform{% endblock %}
+
+{% block content %}
+<h1>Dashboard</h1>
+
+<!-- Create Post Form -->
+<div class="card">
+    <h2>Create Post</h2>
+    <form method="POST" action="{{ url_for('create_post') }}">
+        <div class="form-group">
+            <label for="content">Content</label>
+            <textarea id="content" name="content" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="media_url">Media URL (optional)</label>
+            <input type="url" id="media_url" name="media_url">
+        </div>
+        <button type="submit" class="btn">Post</button>
+    </form>
+</div>
+
+<!-- Posts Feed -->
+<h2>Posts</h2>
+{% if posts %}
+    {% for post in posts %}
+    <div class="card">
+        <div class="post-header">
+            <div>
+                <strong>{{ post.user_name }}</strong>
+                <span style="color: var(--text-muted); font-size: 0.85rem; display: block; margin-top: 0.25rem;">
+                    {{ post.created_at[:16] if post.created_at else '' }}
+                </span>
+            </div>
+        </div>
+        <p style="margin-bottom: 1rem; white-space: pre-wrap;">{{ post.content or '' }}</p>
+        {% if post.media_url %}
+        <div style="margin-bottom: 1rem;">
+            <a href="{{ post.media_url }}" target="_blank">View Media</a>
+        </div>
+        {% endif %}
+        
+        <div class="post-actions">
+            <form method="POST" action="{{ url_for('toggle_like', post_id=post.post_id) }}" style="display: inline;">
+                <button type="submit" class="btn {% if post.post_id in liked_posts %}btn-success{% endif %}">
+                    Like ({{ post.like_count }})
+                </button>
+            </form>
+        </div>
+        
+        <!-- Comments Section -->
+        <div class="comments">
+            <h3 style="font-size: 0.95rem; margin-bottom: 0.75rem; font-weight: 500;">
+                Comments ({{ post.comment_count }})
+            </h3>
+            
+            {% if comments_dict[post.post_id] %}
+                {% for comment in comments_dict[post.post_id] %}
+                <div class="comment">
+                    <div class="comment-author">{{ comment.user_name }}</div>
+                    <div>{{ comment.comment_text }}</div>
+                    <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">
+                        {{ comment.created_at[:16] if comment.created_at else '' }}
+                    </div>
+                </div>
+                {% endfor %}
+            {% endif %}
+            
+            <form method="POST" action="{{ url_for('add_comment', post_id=post.post_id) }}" style="margin-top: 1rem;">
+                <div class="form-group" style="margin-bottom: 0.5rem;">
+                    <input type="text" name="comment_text" required>
+                </div>
+                <button type="submit" class="btn" style="padding: 0.5rem 1rem; font-size: 0.85rem;">Comment</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+{% else %}
+    <div class="card">
+        <p style="text-align: center; color: var(--text-muted); padding: 2rem;">
+            No posts yet.
+        </p>
+    </div>
+{% endif %}
+{% endblock %}
+
